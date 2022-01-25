@@ -2,12 +2,15 @@ package com.godcoder.sion_21.controller;
 
 import com.godcoder.sion_21.model.Board;
 import com.godcoder.sion_21.repository.BoardRepository;
+import com.godcoder.sion_21.service.BoardService;
 import com.godcoder.sion_21.validator.BoardValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,6 +26,9 @@ public class BoardController {
 
     @Autowired
     private BoardRepository boardRepository;
+
+    @Autowired
+    private BoardService boardService;
 
     @Autowired
     private BoardValidator boardValidator;
@@ -55,13 +61,15 @@ public class BoardController {
         return "board/form";
     }
     @PostMapping("/form")
-    public String greetingSubmit(@Valid Board board, BindingResult bindingresult) { //사이즈같은 조건에
+    //인증정보를 자기가 가져와야함
+    public String postForm(@Valid Board board, BindingResult bindingresult, Authentication authentication) { //사이즈같은 조건에
         // 맞지 않는다면
         boardValidator.validate(board,bindingresult);
         if (bindingresult.hasErrors()) {
             return "board/form";
         }
-        boardRepository.save(board);
+        String username = authentication.getName();
+        boardService.save(username,board);
         return "redirect:/board/list";//값을뿌려야함
     }
 

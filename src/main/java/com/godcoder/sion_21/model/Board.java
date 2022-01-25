@@ -1,13 +1,13 @@
 package com.godcoder.sion_21.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -22,4 +22,12 @@ public class Board {
     @Size(min=2, max=30,message = "제목을 2~30으로 맞추도록.")
     private String title;
     private String content;
+
+    //board에서 user 정보 알수 잇도록
+    @ManyToOne
+    @JoinColumn(name="user_id")//d어떤 테이블과 연결될지 ,, 사용자 컬럼의 어떤 것과 연결이 되는지!
+    //User테이블에 id와 연결이 되므로
+    @JsonIgnore
+    private User user;
+
 }
