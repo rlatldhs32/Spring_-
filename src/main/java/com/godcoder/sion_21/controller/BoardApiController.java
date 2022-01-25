@@ -4,6 +4,7 @@ package com.godcoder.sion_21.controller;
 import com.godcoder.sion_21.model.Board;
 import com.godcoder.sion_21.repository.BoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.util.StringUtils;
 
@@ -50,6 +51,7 @@ public class BoardApiController {
                 });
     }
 
+    @Secured("ROLE_ADMIN") //권한을 줌. 원래는 그냥 호추ㄹ주면없앨수도있었음.
     @DeleteMapping("/boards/{id}")
     void deleteBoard(@PathVariable Long id) {
         repository.deleteById(id);
