@@ -21,25 +21,25 @@ public class UserApiController {
     private UserRepository repository;
 
     @GetMapping("/users") //required=false 하면 안줘도 됨 만약 저거 안주면 무조건 파라미터 줘야함
-    List<User> all(@RequestParam(required = false) String method,@RequestParam(required = false) String text ){ //이 안에 매겝녀수하면 파라메터로 받음
+    Iterable<User> all(@RequestParam(required = false) String method,@RequestParam(required = false) String text ){ //이 안에 매겝녀수하면 파라메터로 받음
 //        List<User> users = repository.findAll();
-        List<User> users = null;
+        Iterable<User> users = null;
         if("query".equals(method)){
             users=repository.findByUsernameQuery(text);
         }else if("nativeQuery".equals(method)){
             users=repository.findByUsernameNativeQuery(text);
         }else if("querydsl".equals(method)){ //Q클래스명 -> 사용가능
-
             QUser user = QUser.user;
-//            Predicate predicate = user.firstname.equalsIgnoreCase("dave") //대소문자 구분없이 dave라는 이름이면서
-//                    .and(user.lastname.startsWithIgnoreCase("mathews")); //last네임으 ㄴ저거
-//
-//            repository.findAll(predicate);
+            Predicate predicate = user.username.contains(text); //like검색 : contatins
+            users=repository.findAll(predicate);
+        }else if("querydslCustom".equals(method)) { //Q클래스명 -> 사용가능
+            users = repository.findByUsernameCustom(text); //커스텀클래스 사용가능
+        }else if("jdbc".equals(method)) { //Q클래스명 -> 사용가능
+            users = repository.findByUsernameJdbc(text); //커스텀클래스 사용가능
         }
         else{
             users = repository.findAll();
         }
-        users.get(0).getBoards().size();
         return users; //사용자의 건수에 따라서 n+1 프라블럼.(너무 많이호출함. 따라서 )
     }
 
