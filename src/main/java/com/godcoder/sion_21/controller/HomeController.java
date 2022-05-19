@@ -8,6 +8,9 @@ public class HomeController {
 
     @GetMapping
     public String index(){
-        return "index";
+        return "good";
     }
+
+//    @GetMapping("/sion/sion")
+//    public String sion(){return "good";}
 }

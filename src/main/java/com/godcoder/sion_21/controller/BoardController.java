@@ -47,7 +47,7 @@ public class BoardController {
         model.addAttribute("startPage",startPage);
         model.addAttribute("endPage",endPage);
         model.addAttribute("boards",boards);
-        return "board/list";
+        return "bo2ard/list";
     }
 
     @GetMapping("/form")
